@@ -10,7 +10,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 export default function PostPageAdd() {
   const [user, loading] = useAuthState(auth);
   const [caption, setCaption] = useState("");
-  const [image, setImage] = useState("https://zca.sg/img/placeholder");
+  const [image, setImage] = useState("");
+  const [previewImage, setPreviewImage] = useState(
+    "https://zca.sg/img/placeholder"
+  );
   const navigate = useNavigate();
 
   async function addPost() {
@@ -50,7 +53,7 @@ export default function PostPageAdd() {
             />
           </Form.Group>
           <Image
-            src={image}
+            src={previewImage}
             style={{
               objectFit: "cover",
               width: "10rem",
@@ -62,8 +65,10 @@ export default function PostPageAdd() {
             <Form.Control
               type="file"
               onChange={(e) => {
-                const selectedImage = URL.createObjectURL(e.target.files[0]);
-                setImage(selectedImage);
+                const imageFile = e.target.files[0];
+                const previewImage = URL.createObjectURL(imageFile);
+                setImage(imageFile);
+                setPreviewImage(previewImage);
               }}
             />
           </Form.Group>
