@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Form, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Form, Image, Nav, Navbar } from "react-bootstrap";
 import { addDoc, collection } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 export default function PostPageAdd() {
   const [user, loading] = useAuthState(auth);
   const [caption, setCaption] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState("https://zca.sg/img/placeholder");
   const navigate = useNavigate();
 
   async function addPost() {
@@ -49,12 +49,22 @@ export default function PostPageAdd() {
               onChange={(text) => setCaption(text.target.value)}
             />
           </Form.Group>
-
+          <Image
+            src={image}
+            style={{
+              objectFit: "cover",
+              width: "10rem",
+              height: "10rem",
+            }}
+          />
           <Form.Group className="mb-3" controlId="image">
             <Form.Label>Image</Form.Label>
             <Form.Control
               type="file"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                const selectedImage = URL.createObjectURL(e.target.files[0]);
+                setImage(selectedImage);
+              }}
             />
           </Form.Group>
           <Button variant="primary" onClick={async (e) => addPost()}>
